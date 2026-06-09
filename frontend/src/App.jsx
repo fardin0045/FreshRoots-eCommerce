@@ -8,6 +8,17 @@ import { VerifyEmail } from "./pages/VerifyEmail"
 import Profile from "./pages/Profile"
 import { Footer } from "./components/Footer"
 import { Products } from "./pages/Products"
+import { Cart } from "./pages/Cart"
+import Dashboard from "./pages/Dashboard"
+import AdminSales from "./pages/admin/AdminSales"
+import AddProduct from "./pages/admin/AddProduct"
+import AdminProduct from "./pages/admin/AdminProduct"
+import AdminOrder from "./pages/admin/AdminOrder"
+import ShowUserOrder from "./pages/admin/ShowUserOrder"
+import AdminUsers from "./pages/admin/AdminUsers"
+import UserInfo from "./pages/admin/UserInfo"
+import ProtectedRoute from "./components/ProtectedRoute"
+import SingleProduct from "./pages/SingleProduct"
 
 const router = createBrowserRouter([
   {
@@ -32,12 +43,57 @@ const router = createBrowserRouter([
   },
   {
     path:'/profile/:userId',
-    element:<><Navbar/><Profile/> <Footer/> </>
+    element:<ProtectedRoute ><Navbar/><Profile/> <Footer/> </ProtectedRoute>
   }
   ,
   {
     path:'/products',
     element:<><Navbar/> <Products/>  </>
+  },
+  {
+    path:'/products/:id',
+    element:<><Navbar/> <SingleProduct/>  </>
+  }
+  ,
+  {
+    path:'/cart',
+    element:<ProtectedRoute><Navbar/> <Cart/> </ProtectedRoute>
+  }
+  ,
+  {
+    path:'/dashboard',
+    element:<ProtectedRoute adminOnly={true}> <Dashboard/> </ProtectedRoute>,
+    children:[
+      {
+        path:"sales",
+        element:<AdminSales/>
+      },
+      {
+        path:"add-product",
+        element:<AddProduct/>
+      },
+      {
+        path:"products",
+        element:<AdminProduct />
+      },
+      {
+        path:"orders",
+        element:<AdminOrder />
+      },
+      {
+        path:"users/orders/:userId",
+        element:<ShowUserOrder/>
+      },
+      {
+        path:"users",
+        element:<AdminUsers/>
+      },
+      {
+        path:"users/:id",
+        element:<UserInfo/>
+      },
+      
+    ]
   }
 ])
 function App() {

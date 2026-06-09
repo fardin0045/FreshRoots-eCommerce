@@ -23,7 +23,8 @@ const [loading, setLoading] = useState(false);
 const [search ,setSearch] = useState("")
 const [category,setCategory] =  useState("All")
 const [brand,setBrand] =  useState("All")
-const [priceRange, setPriceRange] = useState([0,99999])
+const [priceRange, setPriceRange] = useState([0,99999]);
+const [sortOrder, setSortOrder] = useState("");
 const dispatch = useDispatch()
 
   const getAllProducts = async () => {
@@ -60,7 +61,14 @@ const dispatch = useDispatch()
 
     filtered = filtered.filter(p=>p.productPrice >= priceRange[0] && p.productPrice <= priceRange[1])
     
-  },[])
+    if(sortOrder === "lowToHigh"){
+      filtered.sort((a,b)=>a.productPrice - b.productPrice)
+    }else if(sortOrder === "highToLow"){
+      filtered.sort((a,b)=>b.productPrice - a.productPrice)
+    }
+    dispatch(setProducts(filtered))
+
+  },[search,category,brand,sortOrder,priceRange,allProducts,dispatch])
 
   useEffect(() => {
     getAllProducts();
@@ -84,7 +92,7 @@ const dispatch = useDispatch()
         {/* Main Product Section */}
         <div className="flex flex-col flex-1 ">
           <div className="flex justify-end mb-4">
-            <Select>
+            <Select onValueChange={(value) =>setSortOrder(value)}>
               <SelectTrigger className="w-[200px]">
                 <SelectValue placeholder="Sort by Price" />
               </SelectTrigger>
@@ -98,7 +106,7 @@ const dispatch = useDispatch()
           </div>
           {/* Product grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-7">
-            {allProducts.map((product, index) => (
+            {products.map((product, index) => (
               <ProductCard
                 key={product?._id ?? product?.id ?? product?.productName ?? `product-${index}`}
                 product={product} loading={loading} 

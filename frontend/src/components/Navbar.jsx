@@ -13,10 +13,13 @@ import { setUser } from '@/redux/userSlice';
 
 export const Navbar = () => {
   const {user} =useSelector(store=>store.user)
+  const {cart} = useSelector(store => store.product)
   const dispatch = useDispatch();
   const navigate =useNavigate();
+  const accessToken = localStorage.getItem('accessToken');
+  const admin = user?.role === 'admin' ? true : false
 
-  const accessToken = localStorage.getItem('accessToken')
+  
   const logoutHandler = async ()=>{
     try{
       const res = await axios.post('http://localhost:8000/api/users/logout',{},{
@@ -73,6 +76,14 @@ export const Navbar = () => {
                 Hello ,{user.firstName}
               </Link>
             }
+            {admin && 
+              <Link
+                to={`/dashboard`}
+                className="flex items-center gap-2 text-gray-700 hover:text-green-600 transition font-medium"
+              >
+                <User size={18} />Dashboard
+              </Link>
+            }
           </nav>
 
           {/* Right Section */}
@@ -104,7 +115,7 @@ export const Navbar = () => {
                   justify-center
                 "
               >
-                0
+                {cart.items.length || 0}
               </span>
             </Link>
 
