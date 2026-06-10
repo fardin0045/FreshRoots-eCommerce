@@ -62,7 +62,7 @@ const router = createBrowserRouter([
   ,
   {
     path:'/dashboard',
-    element:<ProtectedRoute adminOnly={true}> <Dashboard/> </ProtectedRoute>,
+    element:<ProtectedRoute adminOnly={true}> <Navbar/> <Dashboard/> </ProtectedRoute>,
     children:[
       {
         path:"sales",
