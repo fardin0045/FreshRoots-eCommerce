@@ -42,8 +42,7 @@ const Login = () => {
   };
 
   const submitHandler = async (e) => {
-    e.preventDefault();
-    console.log(formData);
+    e.preventDefault()
     try { 
         setLoading(true)
         const res = await axios.post(`${API_URL}/api/users/login`,formData,{

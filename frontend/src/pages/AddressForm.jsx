@@ -86,7 +86,6 @@ const API_URL = import.meta.env.VITE_API_URL;
       );
 
       const order = res.data.order;
-      console.log('Order created:', order._id);
 
       if (paymentMethod === 'COD') {
         navigate(`/payment/success?orderId=${order._id}&amount=${total.toFixed(2)}&method=COD`);
