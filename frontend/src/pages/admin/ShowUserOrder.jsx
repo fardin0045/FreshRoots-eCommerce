@@ -6,11 +6,11 @@ import { useParams } from 'react-router-dom';
 const ShowUserOrder = () => {
   const [userOrder, setUserOrder] = useState(null);
   const params = useParams();
-
+const API_URL = import.meta.env.VITE_API_URL;
   const getUserOrders = async () => {
     const accessToken = localStorage.getItem('accessToken');
     const res = await axios.get(
-      `http://localhost:8000/api/orders/user-order/${params.userId}`,
+      `${API_URL}/api/orders/user-order/${params.userId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,

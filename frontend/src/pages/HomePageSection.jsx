@@ -6,6 +6,7 @@ import ProductCard from "@/pages/ProductCard";
 const GRID_LIMIT = 6;      // ≤ this → plain grid
 const MAX_SECTIONS = 4;    // max sections shown
 const CARDS_PER_SLIDE = 6; // cards visible at once in carousel
+const API_URL = import.meta.env.VITE_API_URL;
 
 // ── Decorative Section Title ──────────────────────────────────────────────────
 const SectionHeader = ({ title }) => (
@@ -144,7 +145,7 @@ const HomepageSections = () => {
     (async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:8000/api/products/getAllProducts"
+          `${API_URL}/api/products/getAllProducts`
         );
         if (data.success) setProducts(data.products);
       } catch (err) {

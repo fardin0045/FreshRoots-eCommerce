@@ -11,9 +11,10 @@ const AdminUsers = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate()
   const getAllUsers = async () => {
+    const API_URL = import.meta.env.VITE_API_URL;
     const accessToken = localStorage.getItem('accessToken');
     try {
-      const res = await axios.get(`http://localhost:8000/api/users/all-user`, {
+      const res = await axios.get(`${API_URL}/api/users/all-user`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

@@ -78,11 +78,12 @@ const AddProduct = () => {
       formData.append('files', img);
     });
 
+    const API_URL = import.meta.env.VITE_API_URL;
     try {
       setLoading(true);
 
       const res = await axios.post(
-        'http://localhost:8000/api/products/add',
+        `${API_URL}/api/products/add`,
         formData,
         {
           headers: {

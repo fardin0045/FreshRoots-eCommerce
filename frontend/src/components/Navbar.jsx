@@ -101,6 +101,7 @@ export const Navbar = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false); // mobile search
   const profileRef = useRef(null);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // Close profile dropdown on outside click
   useEffect(() => {
@@ -122,7 +123,7 @@ export const Navbar = () => {
   const logoutHandler = async () => {
     try {
       const res = await axios.post(
-        'http://localhost:8000/api/users/logout', {},
+        `${API_URL}/api/users/logout`, {},
         { headers: { Authorization: `Bearer ${accessToken}` } }
       );
       if (res.data.success) {

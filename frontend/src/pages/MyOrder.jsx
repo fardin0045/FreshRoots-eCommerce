@@ -7,9 +7,10 @@ const MyOrder = () => {
   const [userOrder, setUserOrder] = useState(null);
   const navigate = useNavigate();
 
+  const API_URL = import.meta.env.VITE_API_URL;
   const getUserOrders = async () => {
     const accessToken = localStorage.getItem('accessToken');
-    const res = await axios.get('http://localhost:8000/api/orders/my-order', {
+    const res = await axios.get(`${API_URL}/api/orders/my-order`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

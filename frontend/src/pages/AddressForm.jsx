@@ -60,7 +60,7 @@ export const AddressForm = () => {
   const shipping = subtotal > 498 ? 0 : 70;
   const tax = parseFloat((subtotal * 0.06).toFixed(2));
   const total = subtotal + shipping + tax;
-
+const API_URL = import.meta.env.VITE_API_URL;
   const handleCheckout = async () => {
     try {
       setLoading(true);
@@ -73,7 +73,7 @@ export const AddressForm = () => {
 
       // Create Order
       const res = await axios.post(
-        'http://localhost:8000/api/orders/checkout',
+        `${API_URL}/api/orders/checkout`,
         {
           address: addresses?.[selectedAddress] || {},
           paymentMethod,
@@ -95,7 +95,7 @@ export const AddressForm = () => {
 
       // Initiate Payment
       const paymentRes = await axios.post(
-        `http://localhost:8000/api/payment/pay/${order._id}`,
+        `${API_URL}/api/payment/pay/${order._id}`,
         {},
         {
           headers: {

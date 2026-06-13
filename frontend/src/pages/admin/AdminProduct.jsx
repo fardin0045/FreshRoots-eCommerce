@@ -92,9 +92,10 @@ const AdminProduct = () => {
       .forEach((file) => {
         formData.append('files', file);
       });
+      const API_URL = import.meta.env.VITE_API_URL;
     try {
       const res = await axios.put(
-        `http://localhost:8000/api/products/update/${editProduct._id}`,
+        `${API_URL}/api/products/update/${editProduct._id}`,
         formData,
         {
           headers: {
@@ -114,6 +115,7 @@ const AdminProduct = () => {
       console.log(err);
     }
   };
+  const API_URL = import.meta.env.VITE_API_URL;
   const deleteProductHandler = async (productId) => {
     if (!accessToken) {
       toast.error('Login required');
@@ -121,7 +123,7 @@ const AdminProduct = () => {
     }
     try {
       const res = await axios.delete(
-        `http://localhost:8000/api/products/delete/${productId}`,
+        `${API_URL}/api/products/delete/${productId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

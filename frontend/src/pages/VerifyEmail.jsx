@@ -12,10 +12,11 @@ export const VerifyEmail = () => {
       setStatus('Invalid verification link.');
       return;
     }
+    const API_URL = import.meta.env.VITE_API_URL;
 
     try {
       const res = await axios.post(
-        'http://localhost:8000/api/users/Verify',
+        `${API_URL}/api/users/Verify`,
         {},
         {
           headers: {

@@ -5,12 +5,13 @@ import { Button } from '@/components/ui/button';
 import { ShoppingCart, Trash2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link,  useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { setCart } from '@/redux/productSlice';
 import { toast } from 'sonner';
 import { useEffect } from 'react';
 
+const API_URL = import.meta.env.VITE_API_URL;
 export const Cart = ({ product }) => {
   const { cart } = useSelector((store) => store.product);
   const subTotal = cart?.totalPrice || 0;
@@ -21,7 +22,7 @@ export const Cart = ({ product }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const API = 'http://localhost:8000/api/carts';
+  const API = `${API_URL}api/carts`;
   const accessToken = localStorage.getItem('accessToken');
 
   const loadCart = async () => {

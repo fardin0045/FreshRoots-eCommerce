@@ -20,12 +20,12 @@ const ProductCard = ({ product, loading }) => {
   const discountedPrice = hasDiscount
     ? Math.round(productPrice - (productPrice * offerPercentage) / 100)
     : productPrice;
-
+const API_URL = import.meta.env.VITE_API_URL;
   const addToCart = async (productId) => {
     setAddingToCart(true);
     try {
       const res = await axios.post(
-        'http://localhost:8000/api/carts/add',
+        `${API_URL}/api/carts/add`,
         { productId },
         { headers: { Authorization: `Bearer ${accessToken}` } }
       );

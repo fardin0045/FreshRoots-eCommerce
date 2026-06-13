@@ -4,13 +4,13 @@ import { Input } from "./ui/input"
 import { toast } from "sonner"
 import { useDispatch } from "react-redux"
 
-
+const API_URL = import.meta.env.VITE_API_URL;
 const ProductDesc = ({product}) => {
     const accessToken = localStorage.getItem('accessToken');
     const dispatch = useDispatch()
     const addToCart = async(productId)=>{
         try{
-            const res = await axios.post('http://localhost:8000/api/carts/add',{productId},{
+            const res = await axios.post(`${API_URL}/api/carts/add`,{productId},{
                 headers:{
                     Authorization:`Bearer ${accessToken}`
                 }

@@ -13,10 +13,11 @@ const AdminOrder = () => {
     fetchOrders()
   }, [])
 
+  const API_URL = import.meta.env.VITE_API_URL;
   const fetchOrders = async () => {
     try {
       setLoading(true)
-      const response = await axios.get('http://localhost:8000/api/orders/all-order', {
+      const response = await axios.get(`${API_URL}/api/orders/all-order`, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -36,7 +37,7 @@ const AdminOrder = () => {
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       setUpdatingId(orderId)
-      await axios.put(`http://localhost:8000/api/orders/${orderId}`,
+      await axios.put(`${API_URL}/api/orders/${orderId}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${accessToken}` } }
       )

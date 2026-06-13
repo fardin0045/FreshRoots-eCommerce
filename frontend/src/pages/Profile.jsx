@@ -56,8 +56,9 @@ const Profile = () => {
       if (file) {
         formData.append('profilePic', file);
       }
+      const API_URL = import.meta.env.VITE_API_URL;
       const res = await axios.put(
-        `http://localhost:8000/api/users/update/${userId}`,
+        `${API_URL}/api/users/update/${userId}`,
         formData,
         {
           headers: {

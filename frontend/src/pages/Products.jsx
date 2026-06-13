@@ -31,12 +31,12 @@ export const Products = () => {
   useEffect(() => {
     setSearch(queryFromUrl);
   }, [queryFromUrl]);
-
+const API_URL = import.meta.env.VITE_API_URL;
   // Fetch all products once
   const getAllProducts = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get('http://localhost:8000/api/products/getAllProducts');
+      const { data } = await axios.get(`${API_URL}/api/products/getAllProducts`);
       if (data?.success) {
         setAllProducts(data.products ?? []);
         dispatch(setProducts(data.products ?? []));

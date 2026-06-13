@@ -19,7 +19,8 @@ export const PaymentReturn = () => {
   const message = searchParams.get('message');
   const method = searchParams.get('method');
   const pathname = window.location.pathname;
-
+const API_URL = import.meta.env.VITE_API_URL;
+  
   useEffect(() => {
     const verifyPayment = async () => {
       try {
@@ -30,7 +31,7 @@ export const PaymentReturn = () => {
             const accessToken = localStorage.getItem('accessToken');
             try {
               const res = await axios.get(
-                `http://localhost:8000/api/payment/verify/${orderId}`,
+                `${API_URL}/api/payment/verify/${orderId}`,
                 {
                   headers: {
                     Authorization: `Bearer ${accessToken}`,

@@ -40,10 +40,10 @@ const Signup = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    const API_URL = import.meta.env.VITE_API_URL;
     try { 
         setLoading(true)
-        const res = await axios.post('http://localhost:8000/api/users/register',formData,{
+        const res = await axios.post(`${API_URL}/api/users/register`,formData,{
             headers:{
                 "Content-Type":"application/json"
             }
