@@ -9,7 +9,8 @@ export const verifyEmail = (token, email) => {
       pass: process.env.MAIL_PASS,
     },
   });
-
+  console.log(process.env.MAIL_USER);
+  console.log(process.env.MAIL_PASS ? 'PASS EXISTS' : 'NO PASS');
   const mailConfigurations = {
     // It should be a string of sender/server email
     from: process.env.MAIL_USER,
@@ -21,7 +22,7 @@ export const verifyEmail = (token, email) => {
     text: `Hi! There, You have recently visited 
            our website and entered your email.
            Please follow the given link to verify your email
-           http://localhost:5173/verify/${token} 
+           ${process.env.PAYMENT_RETURN_URL}/verify/${token} 
            Thanks`,
   };
   transporter.sendMail(mailConfigurations, function (error, info) {
