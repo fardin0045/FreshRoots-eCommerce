@@ -3,11 +3,10 @@ import 'dotenv/config';
 
 export const verifyEmail = (token, email) => {
   const transporter = nodemailer.createTransport({
-    service:'gmail',
     host: 'smtp.gmail.com',
     port: 587,
     secure: false,
-    family:4,
+    family: 4,
     auth: {
       user: process.env.MAIL_USER,
       pass: process.env.MAIL_PASS,
@@ -26,11 +25,15 @@ export const verifyEmail = (token, email) => {
     subject: 'Email Verification',
 
     // This would be the text of email body
-    text: `Hi! There, You have recently visited 
-           our website and entered your email.
-           Please follow the given link to verify your email
-           ${process.env.PAYMENT_RETURN_URL}/verify/${token} 
-           Thanks`,
+    text: `Hi,
+
+You recently registered on our website.
+
+Please verify your email using this link:
+
+${process.env.PAYMENT_RETURN_URL}/verify/${token}
+
+Thanks`,
   };
   transporter.sendMail(mailConfigurations, function (error, info) {
     if (error) {

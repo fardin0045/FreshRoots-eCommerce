@@ -10,7 +10,8 @@ import orderRoutes from "./routes/orderRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js"
 const port = process.env.PORT || 5000;
 const app = express();
-
+import dns from "dns";
+dns.setDefaultResultOrder("ipv4first");
 //middleware
 app.use(express.json());
 app.use(cors({
