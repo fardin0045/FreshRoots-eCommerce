@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
 import profile from '../assets/onik.png';
 import { Label } from '@/components/ui/label';
 import { Input } from '@base-ui/react';
@@ -16,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'sonner';
 import axios from 'axios';
 import { setUser } from '@/redux/userSlice';
-import { Camera, MapPin, Phone, Mail, User, } from 'lucide-react';
+import { MapPin, Phone, User } from 'lucide-react';
 const Profile = () => {
   const { user } = useSelector((store) => store.user);
   const params = useParams();
@@ -50,7 +43,7 @@ const Profile = () => {
     e.preventDefault();
     const accessToken = localStorage.getItem('accessToken');
     try {
-      //use formData for text +file
+      setLoading(true);
       const formData = new FormData();
       formData.append('firstName', updateUser.firstName);
       formData.append('lastName', updateUser.lastName);
@@ -61,7 +54,7 @@ const Profile = () => {
       formData.append('zipCode', updateUser.zipCode);
       formData.append('role', updateUser.role);
       if (file) {
-        formData.append('file', file); //image file for backend multer
+        formData.append('profilePic', file);
       }
       const res = await axios.put(
         `http://localhost:8000/api/users/update/${userId}`,
@@ -69,201 +62,196 @@ const Profile = () => {
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'multipart/form-data',
           },
         },
       );
+      console.log(formData);
       if (res.data.success) {
         toast.success(res.data.message);
         dispatch(setUser(res.data.user));
+        setUpdateUser((prev) => ({
+          ...prev,
+          ...res.data.user,
+          profilePic: res.data.user.profilePic || prev.profilePic,
+        }));
       }
     } catch (error) {
       console.log(error);
       toast.error('Failed to update profile');
+    } finally {
+      setLoading(false);
     }
   };
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 pt-24 pb-10">
-      <div className="max-w-7xl mx-auto px-4">
-        <Tabs defaultValue="profile">
-          {/* Top Center Tabs */}
-          <div className="flex justify-center mb-10">
-            <TabsList className="h-14 bg-white/90 backdrop-blur-md border border-green-100 shadow-lg rounded-2xl p-1">
-              <TabsTrigger
-                value="profile"
-                className="px-8 rounded-xl font-medium data-[state=active]:bg-green-600 data-[state=active]:text-white"
-              >
-                Profile
-              </TabsTrigger>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="mb-8">
+          <p className="text-sm uppercase tracking-[0.3em] text-emerald-600">
+            Account settings
+          </p>
+          <h1 className="mt-3 text-3xl font-bold text-gray-900 sm:text-4xl">
+            Your profile
+          </h1>
+          <p className="mt-3 max-w-2xl text-gray-600 sm:text-lg">
+            Keep your contact information current and update your profile details.
+          </p>
+        </div>
 
-              <TabsTrigger
-                value="orders"
-                className="px-8 rounded-xl font-medium data-[state=active]:bg-green-600 data-[state=active]:text-white"
-              >
-                Orders
-              </TabsTrigger>
-            </TabsList>
-          </div>
+        <div className="grid gap-8 xl:grid-cols-[360px_1fr]">
+          <div className="space-y-6">
+            <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+              <div className="flex flex-col items-center text-center">
+                <img
+                  src={updateUser.profilePic || profile}
+                  alt="profile"
+                  className="h-32 w-32 rounded-full border-4 border-emerald-200 object-cover"
+                />
+                <h2 className="mt-5 text-xl font-semibold text-gray-900">
+                  {updateUser.firstName} {updateUser.lastName}
+                </h2>
+                <p className="mt-1 text-sm text-gray-500">{updateUser.email}</p>
+              </div>
 
-          {/* PROFILE TAB */}
-          <TabsContent value="profile">
-            <div className="grid lg:grid-cols-[320px_1fr] gap-8">
-              {/* Left Card */}
-              <div className="bg-white rounded-3xl shadow-xl p-6 border border-gray-100">
-                <div className="flex flex-col items-center">
-                  <img
-                    src={updateUser.profilePic || profile}
-                    alt="profile"
-                    className="w-32 h-32 rounded-full object-cover border-4 border-green-200"
-                  />
-
-                  <h2 className="mt-4 text-xl font-bold">
-                    {updateUser.firstName} {updateUser.lastName}
-                  </h2>
-
-                  <p className="text-gray-500 text-sm">{updateUser.email}</p>
-
-                  <div className="w-full mt-6 space-y-4">
-                    <div className="flex items-center gap-3">
-                      <Phone size={18} className="text-green-600" />
-                      <span>{updateUser.phoneNumber || 'Not Added'}</span>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <MapPin size={18} className="text-green-600" />
-                      <span>{updateUser.city || 'Unknown City'}</span>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <User size={18} className="text-green-600" />
-                      <span>{updateUser.role}</span>
-                    </div>
+              <div className="mt-8 space-y-4">
+                <div className="flex items-center gap-3 rounded-2xl bg-green-50 p-4">
+                  <Phone size={20} className="text-emerald-600" />
+                  <div>
+                    <p className="text-sm text-gray-500">Phone</p>
+                    <p className="text-base font-medium text-gray-900">
+                      {updateUser.phoneNumber || 'Not added'}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 rounded-2xl bg-green-50 p-4">
+                  <MapPin size={20} className="text-emerald-600" />
+                  <div>
+                    <p className="text-sm text-gray-500">City</p>
+                    <p className="text-base font-medium text-gray-900">
+                      {updateUser.city || 'Unknown city'}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 rounded-2xl bg-green-50 p-4">
+                  <User size={20} className="text-emerald-600" />
+                  <div>
+                    <p className="text-sm text-gray-500">Role</p>
+                    <p className="text-base font-medium text-gray-900">
+                      {updateUser.role}
+                    </p>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
 
-              {/* Right Form */}
-              <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8">
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <h2 className="text-2xl font-bold text-gray-800">
-                    Personal Information
-                  </h2>
-
-                  <div className="grid md:grid-cols-2 gap-5">
-                    <div>
-                      <Label>First Name</Label>
-                      <Input
-                        name="firstName"
-                        value={updateUser.firstName}
-                        onChange={handleChange}
-                        className="h-12 mt-2 rounded-xl"
-                      />
-                    </div>
-
-                    <div>
-                      <Label>Last Name</Label>
-                      <Input
-                        name="lastName"
-                        value={updateUser.lastName}
-                        onChange={handleChange}
-                        className="h-12 mt-2 rounded-xl"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label>Email Address</Label>
-                    <Input
-                      disabled
-                      value={updateUser.email}
-                      className="h-12 mt-2 rounded-xl bg-gray-100"
-                    />
-                  </div>
-
-                  <div>
-                    <Label>Phone Number</Label>
-                    <Input
-                      name="phoneNumber"
-                      value={updateUser.phoneNumber}
-                      onChange={handleChange}
-                      className="h-12 mt-2 rounded-xl"
-                    />
-                  </div>
-
-                  <div>
-                    <Label>Address</Label>
-                    <Input
-                      name="address"
-                      value={updateUser.address}
-                      onChange={handleChange}
-                      className="h-12 mt-2 rounded-xl"
-                    />
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-5">
-                    <div>
-                      <Label>City</Label>
-                      <Input
-                        name="city"
-                        value={updateUser.city}
-                        onChange={handleChange}
-                        className="h-12 mt-2 rounded-xl"
-                      />
-                    </div>
-
-                    <div>
-                      <Label>Zip Code</Label>
-                      <Input
-                        name="zipCode"
-                        value={updateUser.zipCode}
-                        onChange={handleChange}
-                        className="h-12 mt-2 rounded-xl"
-                      />
-                    </div>
-                  </div>
-
-                  <Button
-                    type="submit"
-                    className="w-full h-12 rounded-xl bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white font-semibold"
-                  >
-                    {loading ? 'Updating...' : 'Save Changes'}
-                  </Button>
-                </form>
+          <div className="rounded-3xl border border-gray-100 bg-white p-8 shadow-sm">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">Account details</h2>
+                <p className="mt-2 text-sm text-gray-500 sm:text-base">
+                  Update your profile, email, and address information.
+                </p>
+              </div>
+              <div className="hidden sm:block">
+                <span className="rounded-full bg-emerald-100 px-3 py-1 text-sm font-medium text-emerald-700">
+                 {updateUser.role}
+                </span>
               </div>
             </div>
-          </TabsContent>
 
-          {/* ORDERS TAB */}
-          <TabsContent value="orders">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8">
-              <h2 className="text-2xl font-bold mb-6">Order History</h2>
-
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b">
-                      <th className="text-left py-4">Order ID</th>
-                      <th className="text-left py-4">Date</th>
-                      <th className="text-left py-4">Status</th>
-                      <th className="text-left py-4">Amount</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    <tr>
-                      <td
-                        colSpan="4"
-                        className="text-center py-10 text-gray-500"
-                      >
-                        No Orders Found
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+            <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+              <div className="grid gap-4 lg:grid-cols-2">
+                <div>
+                  <Label className="font-semibold mb-2">First Name</Label>
+                  <Input
+                    name="firstName"
+                    value={updateUser.firstName}
+                    onChange={handleChange}
+                    className="h-12 w-full rounded-2xl border px-4 bg-gray-50"
+                  />
+                </div>
+                <div>
+                  <Label className=" mb-2 font-semibold">Last Name</Label>
+                  <Input
+                    name="lastName"
+                    value={updateUser.lastName}
+                    onChange={handleChange}
+                    className="h-12 w-full rounded-2xl border px-4 bg-gray-50"
+                  />
+                </div>
               </div>
-            </div>
-          </TabsContent>
-        </Tabs>
+
+              <div>
+                <Label className="font-semibold mb-2">Email Address</Label>
+                <Input
+                  disabled
+                  value={updateUser.email}
+                  className="h-12 w-full rounded-2xl border px-4 bg-gray-50"
+                />
+              </div>
+
+              <div>
+                <Label className="font-semibold mb-2">Profile Photo</Label>
+                <input
+                  type="file"
+                  name="profilePic"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="w-full rounded-2xl border bg-gray-50 px-4 py-3 mt-2"
+                />
+              </div>
+
+              <div className="grid gap-4 lg:grid-cols-2">
+                <div>
+                  <Label className="font-semibold mb-2">Phone Number</Label>
+                  <Input
+                    name="phoneNumber"
+                    value={updateUser.phoneNumber}
+                    onChange={handleChange}
+                    className="h-12 w-full rounded-2xl border px-4 bg-gray-50"
+                  />
+                </div>
+                <div>
+                  <Label className="font-semibold mb-2">Address</Label>
+                  <Input
+                    name="address"
+                    value={updateUser.address}
+                    onChange={handleChange}
+                    className="h-12 w-full rounded-2xl border px-4 bg-gray-50"
+                  />
+                </div>
+              </div>
+
+              <div className="grid gap-4 lg:grid-cols-2">
+                <div>
+                  <Label className="font-semibold mb-2">City</Label>
+                  <Input
+                    name="city"
+                    value={updateUser.city}
+                    onChange={handleChange}
+                    className="h-12 w-full rounded-2xl border px-4 bg-gray-50"
+                  />
+                </div>
+                <div>
+                  <Label className="font-semibold mb-2">Zip Code</Label>
+                  <Input
+                    name="zipCode"
+                    value={updateUser.zipCode}
+                    onChange={handleChange}
+                    className="h-12 w-full rounded-2xl border px-4 bg-gray-50"
+                  />
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full h-14 rounded-2xl bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white text-base font-semibold"
+              >
+                {loading ? 'Updating...' : 'Save Changes'}
+              </Button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );

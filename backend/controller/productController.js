@@ -4,10 +4,10 @@ import getDataUri from '../utils/dataUri.js';
 
 export const addProduct = async (req, res) => {
   try {
-    const { productName, productDesc, productPrice, category, brand } =
+    const { productName, productDesc, productPrice, category, brand,section, offerPercentage, } =
       req.body;
     const userId = req.id;
-    if (!productName || !productPrice || !productDesc || !category || !brand) {
+    if (!productName || !productPrice || !productDesc || !category || !brand || !section ) {
       return res.status(400).json({
         success: false,
         message: 'All fields are required',
@@ -34,6 +34,8 @@ export const addProduct = async (req, res) => {
       productPrice,
       category,
       brand,
+       section,
+        offerPercentage,
       productImg, // array of objects[]
     });
     return res.status(200).json({
@@ -112,6 +114,8 @@ export const updateProduct = async (req, res) => {
       productPrice,
       category,
       brand,
+       section,
+        offerPercentage,
       existingImages,
     } = req.body;
 
@@ -157,6 +161,9 @@ export const updateProduct = async (req, res) => {
     product.productPrice = productPrice || product.productPrice;
     product.category = category || product.category;
     product.brand = brand || product.brand;
+    product.section = section || product.section;
+    product.offerPercentage =
+  offerPercentage ?? product.offerPercentage;
     product.productImg = updatedImages;
 
     await product.save();

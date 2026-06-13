@@ -105,7 +105,7 @@ const Sidebar = () => {
       </div>
 
       {/* User Section */}
-      <div className="border-t border-green-100 p-4">
+      {/* <div className="border-t border-green-100 p-4">
         <div className="flex items-center gap-3 bg-green-50 rounded-2xl p-3">
           <img
             src="https://i.pravatar.cc/150"
@@ -128,7 +128,7 @@ const Sidebar = () => {
           <LogOut size={18} />
           Logout
         </button>
-      </div>
+      </div> */}
     </>
   );
 

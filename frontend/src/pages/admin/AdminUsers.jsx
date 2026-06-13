@@ -40,7 +40,6 @@ const AdminUsers = () => {
   useEffect(() => {
     getAllUsers();
   }, []);
-  console.log(users);
   return (
     <div className="lg:pl-27 md:pl-60 py-20 pr-20 mx-auto px-4 ">
       <h1 className="font-bold text-2xl">User Management</h1>
@@ -77,9 +76,9 @@ const AdminUsers = () => {
                   <Edit />
                   Edit
                 </Button>
-                <Button className="bg-black text-white rounded-lg cursor-pointer">
+                <Button onClick={()=>navigate(`/dashboard/users/orders/${user?._id}`)} className="bg-black text-white rounded-lg cursor-pointer">
                   <Eye />
-                  Show
+                  Show Order
                 </Button>
               </div>
             </div>

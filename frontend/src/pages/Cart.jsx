@@ -83,9 +83,7 @@ export const Cart = ({ product }) => {
           <>
             {/* Header */}
             <div className="mb-8">
-              <h1 className="text-4xl font-bold text-slate-800">
-                Shopping Cart
-              </h1>
+              <h1 className="text-4xl font-bold text-slate-800">Your Cart</h1>
               <p className="text-slate-500 mt-2">
                 Review your items and proceed to checkout
               </p>
@@ -97,15 +95,13 @@ export const Cart = ({ product }) => {
                 {cart?.items?.map((product, index) => (
                   <Card
                     key={index}
-                    className="
-  border-0
+                    className="  border-0
   shadow-[0_10px_40px_rgba(0,0,0,0.08)]
   hover:shadow-[0_20px_60px_rgba(0,0,0,0.12)]
   transition-all
   duration-300
   rounded-3xl
-  bg-white
-"
+  bg-white"
                   >
                     <CardContent className="p-5 cursor-pointer">
                       <div className="flex flex-col md:flex-row justify-between gap-5">
@@ -245,15 +241,21 @@ export const Cart = ({ product }) => {
                     {/* Coupon */}
                     <div className="flex gap-2">
                       <Input placeholder="Promo Code" className="rounded-xl" />
-                      <Button variant="outline">Apply</Button>
+                      <Button variant="outline" className="rounded-xl">
+                        Apply
+                      </Button>
                     </div>
 
                     {/* Checkout */}
-                    <Button className="w-full bg-green-700 hover:bg-green-800 h-12 text-lg">
+                    <Button onClick={()=>navigate('/address')} className="w-full text-white rounded-xl bg-green-700 hover:bg-green-800 h-12 text-lg">
                       PLACE ORDER
                     </Button>
 
-                    <Button variant="outline" className="w-full h-12" asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full h-12 rounded-xl"
+                      asChild
+                    >
                       <Link to="/products">Continue Shopping</Link>
                     </Button>
 
@@ -294,7 +296,10 @@ export const Cart = ({ product }) => {
                 Start exploring our fresh and organic collection.
               </p>
 
-              <Button className="mt-6 bg-green-700 text-white rounded-xl p-4 hover:bg-green-800" asChild>
+              <Button
+                className="mt-6 bg-green-700 text-white rounded-xl p-4 hover:bg-green-800"
+                asChild
+              >
                 <Link to="/products">Start Shopping</Link>
               </Button>
             </div>

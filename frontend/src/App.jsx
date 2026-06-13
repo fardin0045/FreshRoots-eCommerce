@@ -19,6 +19,9 @@ import AdminUsers from "./pages/admin/AdminUsers"
 import UserInfo from "./pages/admin/UserInfo"
 import ProtectedRoute from "./components/ProtectedRoute"
 import SingleProduct from "./pages/SingleProduct"
+import { AddressForm } from "./pages/AddressForm"
+import { PaymentReturn } from "./pages/PaymentReturn"
+import MyOrder from "./pages/MyOrder"
 
 const router = createBrowserRouter([
   {
@@ -58,6 +61,30 @@ const router = createBrowserRouter([
   {
     path:'/cart',
     element:<ProtectedRoute><Navbar/> <Cart/> </ProtectedRoute>
+  }
+  ,
+  {
+    path:'/address',
+    element:<ProtectedRoute> <AddressForm/> </ProtectedRoute>
+  },
+  {
+    path:'my-order',
+    element:<ProtectedRoute> <Navbar/> <MyOrder/> </ProtectedRoute>
+  }
+  ,
+  {
+    path:'/payment/success',
+    element:<PaymentReturn/>
+  }
+  ,
+  {
+    path:'/payment/fail',
+    element:<PaymentReturn/>
+  }
+  ,
+  {
+    path:'/payment/cancel',
+    element:<PaymentReturn/>
   }
   ,
   {

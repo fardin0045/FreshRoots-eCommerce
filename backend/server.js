@@ -6,7 +6,8 @@ import productRoutes from './routes/productRoutes.js';
 import cartRoutes from './routes/cartRoutes.js'
 import connectDB from './database/db.js';
 import cors from 'cors';
-
+import orderRoutes from "./routes/orderRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js"
 const port = process.env.PORT || 5000;
 const app = express();
 
@@ -21,6 +22,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/users', userRoutes);
 app.use('/api/products',productRoutes);
 app.use('/api/carts',cartRoutes);
+
+app.use("/api/orders", orderRoutes);
+app.use("/api/payment", paymentRoutes);
 
 
 app.get('/', (req, res) => {

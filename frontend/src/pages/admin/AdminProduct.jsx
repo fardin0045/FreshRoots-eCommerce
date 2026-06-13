@@ -241,6 +241,15 @@ const AdminProduct = () => {
                             onChange={handleChange}
                           />
                         </Field>
+                        <Field>
+                          <Label className="font-semibold">Section </Label>
+                          <Textarea
+                            name="section"
+                            placeholder="Enter brief description of product"
+                            value={editProduct?.section}
+                            onChange={handleChange}
+                          />
+                        </Field>
                         <ImageUpload
                           productData={editProduct}
                           setProductData={setEditProduct}
