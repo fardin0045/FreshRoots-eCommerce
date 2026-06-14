@@ -11,7 +11,7 @@ const ProductDesc = ({product}) => {
     const addToCart = async(productId)=>{
         try{
             const res = await axios.post(`${API_URL}/api/carts/add`,{productId},{
-                headers:{
+                headers:{ 
                     Authorization:`Bearer ${accessToken}`
                 }
             })

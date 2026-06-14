@@ -11,7 +11,7 @@ import { setCart } from '@/redux/productSlice';
 import { toast } from 'sonner';
 import { useEffect } from 'react';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, '');
 export const Cart = ({ product }) => {
   const { cart } = useSelector((store) => store.product);
   const subTotal = cart?.totalPrice || 0;

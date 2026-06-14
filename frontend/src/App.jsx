@@ -22,6 +22,7 @@ import SingleProduct from "./pages/SingleProduct"
 import { AddressForm } from "./pages/AddressForm"
 import { PaymentReturn } from "./pages/PaymentReturn"
 import MyOrder from "./pages/MyOrder"
+import Wishlist from "./components/Wishlist"
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,11 @@ const router = createBrowserRouter([
   {
     path:'/cart',
     element:<ProtectedRoute><Navbar/> <Cart/> </ProtectedRoute>
+  },
+  {
+    path:'/wishlist',
+    element:<ProtectedRoute><Navbar/> <Wishlist/> </ProtectedRoute>
+
   }
   ,
   {

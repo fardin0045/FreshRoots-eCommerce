@@ -221,7 +221,7 @@ export const Hero = () => {
               className="anim-2 text-4xl sm:text-5xl md:text-[64px] font-black
                            leading-[1.05] tracking-tight text-white"
             >
-              Farm Fresh.
+              Fresh Roots.
               <br />
               <span
                 className="bg-gradient-to-r from-green-300 via-emerald-400 to-green-500
@@ -233,8 +233,7 @@ export const Hero = () => {
 
             {/* Subtext */}
             <p className="anim-3 mt-5 text-base md:text-lg text-white/70 leading-relaxed max-w-lg">
-              Shop seasonal vegetables, organic fruits and pantry staples
-              sourced directly from local farms — at your door in under 2 hours.
+              Fresh Groceries Delivered to Your Doorstep in Under 2 Hours
             </p>
 
             {/* CTA buttons */}

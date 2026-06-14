@@ -158,12 +158,15 @@ export const updateProduct = async (req, res) => {
     //update  products
     product.productName = productName || product.productName;
     product.productDesc = productDesc || product.productDesc;
-    product.productPrice = productPrice || product.productPrice;
+    product.productPrice =
+      productPrice !== undefined ? Number(productPrice) : product.productPrice;
     product.category = category || product.category;
     product.brand = brand || product.brand;
-    product.section = section || product.section;
+    product.section = section?.trim() || product.section;
     product.offerPercentage =
-  offerPercentage ?? product.offerPercentage;
+      offerPercentage !== undefined
+        ? Number(offerPercentage)
+        : product.offerPercentage;
     product.productImg = updatedImages;
 
     await product.save();

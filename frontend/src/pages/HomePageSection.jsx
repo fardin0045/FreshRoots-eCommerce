@@ -3,10 +3,10 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import ProductCard from "@/pages/ProductCard";
 
-const GRID_LIMIT = 6;      // ≤ this → plain grid
+const GRID_LIMIT = 5;      // ≤ this → plain grid
 const MAX_SECTIONS = 4;    // max sections shown
-const CARDS_PER_SLIDE = 6; // cards visible at once in carousel
-const API_URL = import.meta.env.VITE_API_URL;
+const CARDS_PER_SLIDE = 5; // cards visible at once in carousel
+const API_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, '');
 
 // ── Decorative Section Title ──────────────────────────────────────────────────
 const SectionHeader = ({ title }) => (
@@ -74,7 +74,7 @@ const ProductCarousel = ({ products }) => {
       {/* Track */}
       <div
         ref={trackRef}
-        className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-5 transition-all duration-300"
+        className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5 transition-all duration-300"
       >
         {padded.map((product, i) =>
           product ? (
@@ -145,7 +145,11 @@ const HomepageSections = () => {
     (async () => {
       try {
         const { data } = await axios.get(
-          `${API_URL}/api/products/getAllProducts`
+          `${API_URL}/api/products/getAllProducts`,
+          {
+            params: { t: Date.now() },
+            headers: { 'Cache-Control': 'no-cache' },
+          },
         );
         if (data.success) setProducts(data.products);
       } catch (err) {

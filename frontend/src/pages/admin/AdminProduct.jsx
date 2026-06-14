@@ -77,6 +77,8 @@ const AdminProduct = () => {
     formData.append('productDesc', editProduct.productDesc);
     formData.append('brand', editProduct.brand);
     formData.append('category', editProduct.category);
+    formData.append('section', editProduct.section);
+    formData.append('offerPercentage', editProduct.offerPercentage ?? 0);
 
     //add existing images publicid
 

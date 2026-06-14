@@ -84,7 +84,7 @@ const API_URL = import.meta.env.VITE_API_URL;
           overflow: hidden;
           
           flex-direction: column;
-          width: 200px;
+          width: 100%;
           height: 100%;
           transition: box-shadow 0.35s ease, transform 0.35s ease, border-color 0.35s ease;
           cursor: default;
