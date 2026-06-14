@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import 'dotenv/config';
+import axios from 'axios';
 
 const smtpConfigs = [
   {
@@ -36,6 +37,37 @@ export const createMailTransporter = (config = smtpConfigs[0]) => {
 };
 
 export const sendMailWithFallback = async (mailOptions) => {
+  if (process.env.BREVO_API_KEY) {
+    const senderEmail = process.env.MAIL_FROM || process.env.MAIL_USER;
+
+    if (!senderEmail) {
+      throw new Error('MAIL_FROM or MAIL_USER must be set in environment variables');
+    }
+
+    const response = await axios.post(
+      'https://api.brevo.com/v3/smtp/email',
+      {
+        sender: {
+          name: process.env.MAIL_FROM_NAME || 'FreshRoots',
+          email: senderEmail,
+        },
+        to: [{ email: mailOptions.to }],
+        subject: mailOptions.subject,
+        htmlContent: mailOptions.html,
+      },
+      {
+        headers: {
+          accept: 'application/json',
+          'api-key': process.env.BREVO_API_KEY,
+          'content-type': 'application/json',
+        },
+        timeout: 20000,
+      },
+    );
+
+    return { messageId: response.data?.messageId || response.data?.messageIds?.[0] };
+  }
+
   let lastError;
 
   for (const config of smtpConfigs) {
@@ -135,6 +167,6 @@ export const verifyEmail = async (token, email) => {
     return { success: true, messageId: info.messageId };
   } catch (error) {
     console.error('Failed to send verification email:', error.message);
-    throw error;
+    return { success: false, error: error.message };
   }
 };

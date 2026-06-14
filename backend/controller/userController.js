@@ -35,11 +35,13 @@ export const register = async (req, res) => {
     });
     newUser.token = token;
     await newUser.save();
-    try {
-      await verifyEmail(token, email);
-    } catch (emailError) {
+    const emailResult = await verifyEmail(token, email);
+    if (!emailResult.success) {
       await User.findByIdAndDelete(newUser._id);
-      throw emailError;
+      return res.status(503).json({
+        success: false,
+        message: `Email service unavailable: ${emailResult.error}`,
+      });
     }
 
     return res.status(200).json({
@@ -119,7 +121,13 @@ export const reVerify = async (req, res) => {
     });
     user.token = token;
     await user.save();
-    await verifyEmail(token, email);
+    const emailResult = await verifyEmail(token, email);
+    if (!emailResult.success) {
+      return res.status(503).json({
+        success: false,
+        message: `Email service unavailable: ${emailResult.error}`,
+      });
+    }
 
     return res.status(200).json({
       success: true,
@@ -235,7 +243,13 @@ export const forgotPassword = async (req, res) => {
     user.otpExpiry = otpExpiry;
 
     await user.save();
-    await sendOTPMail(otp, email);
+    const emailResult = await sendOTPMail(otp, email);
+    if (!emailResult.success) {
+      return res.status(503).json({
+        success: false,
+        message: `Email service unavailable: ${emailResult.error}`,
+      });
+    }
 
     return res.status(200).json({
       success: true,
