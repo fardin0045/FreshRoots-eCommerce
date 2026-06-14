@@ -1,16 +1,30 @@
 import nodemailer from 'nodemailer';
 import 'dotenv/config';
 
-export const createMailTransporter = () => {
+const smtpConfigs = [
+  {
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+  },
+  {
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+  },
+];
+
+export const createMailTransporter = (config = smtpConfigs[0]) => {
   if (!process.env.MAIL_USER || !process.env.MAIL_PASS) {
     throw new Error('MAIL_USER and MAIL_PASS must be set in environment variables');
   }
 
   return nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
+    ...config,
     family: 4,
+    connectionTimeout: 15000,
+    greetingTimeout: 10000,
+    socketTimeout: 20000,
     auth: {
       user: process.env.MAIL_USER,
       pass: process.env.MAIL_PASS,
@@ -19,6 +33,25 @@ export const createMailTransporter = () => {
       rejectUnauthorized: false,
     },
   });
+};
+
+export const sendMailWithFallback = async (mailOptions) => {
+  let lastError;
+
+  for (const config of smtpConfigs) {
+    try {
+      const transporter = createMailTransporter(config);
+      return await transporter.sendMail(mailOptions);
+    } catch (error) {
+      lastError = error;
+      console.error(
+        `Failed to send email using ${config.host}:${config.port}:`,
+        error.message,
+      );
+    }
+  }
+
+  throw lastError;
 };
 
 const getFrontendUrl = () => {
@@ -33,7 +66,6 @@ const getFrontendUrl = () => {
 
 export const verifyEmail = async (token, email) => {
   try {
-    const transporter = createMailTransporter();
     const verifyUrl = `${getFrontendUrl()}/verify/${token}`;
 
     const mailOptions = {
@@ -98,7 +130,7 @@ export const verifyEmail = async (token, email) => {
       `,
     };
 
-    const info = await transporter.sendMail(mailOptions);
+    const info = await sendMailWithFallback(mailOptions);
     console.log('Verification email sent:', info.messageId);
     return { success: true, messageId: info.messageId };
   } catch (error) {

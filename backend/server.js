@@ -12,6 +12,15 @@ const port = process.env.PORT || 5000;
 const app = express();
 import dns from "dns";
 dns.setDefaultResultOrder("ipv4first");
+
+process.on('unhandledRejection', (error) => {
+  console.error('Unhandled promise rejection:', error);
+});
+
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught exception:', error);
+});
+
 //middleware
 app.use(express.json());
 app.use(cors({
