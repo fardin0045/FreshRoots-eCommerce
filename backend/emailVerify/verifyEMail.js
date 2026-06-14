@@ -163,7 +163,7 @@ export const verifyEmail = async (token, email) => {
     };
 
     const info = await sendMailWithFallback(mailOptions);
-    console.log('Verification email sent:', info.messageId);
+    console.log(`Verification email accepted for ${email}:`, info.messageId);
     return { success: true, messageId: info.messageId };
   } catch (error) {
     console.error('Failed to send verification email:', error.message);
