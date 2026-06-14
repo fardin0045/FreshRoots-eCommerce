@@ -13,7 +13,7 @@ router.get('/',(req,res)=>{
 })
 router.post('/register', register)
 router.post('/verify', verify)
-router.post('/reVerify', reVerify)
+router.post('/re-verify', reVerify)
 router.post('/login', login)
 router.post('/logout',isAuthenticated ,logout)
 router.post('/forgot-password',forgotPassword)
