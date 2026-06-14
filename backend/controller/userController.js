@@ -69,6 +69,7 @@ export const verify = async (req, res) => {
           message: 'The registration token has expired',
         });
       }
+      
       return res.status(400).json({
         success: false,
         message: ' token verification has failed',
