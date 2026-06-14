@@ -1,28 +1,22 @@
-import nodemailer from 'nodemailer';
 import 'dotenv/config';
+import { createMailTransporter } from './verifyEMail.js';
 
-export const  sendOTPMail = async (otp, email) => {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.MAIL_USER,
-      pass: process.env.MAIL_PASS,
-    },
-  });
+export const sendOTPMail = async (otp, email) => {
+  try {
+    const transporter = createMailTransporter();
 
-  const mailConfigurations = {
-    // It should be a string of sender/server email
-    from: process.env.MAIL_USER,
-    to: email,
-    // Subject of Email
-    subject: 'Password Reset OTP',
+    const mailConfigurations = {
+      from: `"FreshRoots" <${process.env.MAIL_USER}>`,
+      to: email,
+      subject: 'Password Reset OTP',
+      html: `<p>Your OTP for password reset is: <b>${otp}</b></p>`,
+    };
 
-    // This would be the text of email body
-   html:`<p>Your OTP for password reset is :<b>${otp}</b></p>`
-  };
-  transporter.sendMail(mailConfigurations, function (error, info) {
-    if (error) throw Error(error);
-    console.log('OTP Sent Successfully');
-    console.log(info);
-  });
+    const info = await transporter.sendMail(mailConfigurations);
+    console.log('OTP email sent:', info.messageId);
+    return { success: true, messageId: info.messageId };
+  } catch (error) {
+    console.error('Failed to send OTP email:', error.message);
+    throw error;
+  }
 };

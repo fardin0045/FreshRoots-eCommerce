@@ -33,9 +33,15 @@ export const register = async (req, res) => {
     const token = jwt.sign({ id: newUser._id }, process.env.SECRET_KEY, {
       expiresIn: '10m',
     });
-    verifyEmail(token, email); //send email
     newUser.token = token;
     await newUser.save();
+    try {
+      await verifyEmail(token, email);
+    } catch (emailError) {
+      await User.findByIdAndDelete(newUser._id);
+      throw emailError;
+    }
+
     return res.status(200).json({
       success: true,
       message: 'User Registered successfully',
@@ -111,13 +117,13 @@ export const reVerify = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, {
       expiresIn: '10m',
     });
-    verifyEmail(token, email); //send email
     user.token = token;
     await user.save();
+    await verifyEmail(token, email);
+
     return res.status(200).json({
       success: true,
       message: 'Verification send again successfully',
-      token: user.token,
     });
   } catch (error) {
     res.status(500).json({
