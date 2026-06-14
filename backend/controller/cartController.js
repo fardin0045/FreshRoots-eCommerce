@@ -106,6 +106,20 @@ export const updateQuantity = async (req, res) => {
     const userId = req.id;
     const { productId, type } = req.body;
 
+    if (!productId || !mongoose.isValidObjectId(productId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid product ID',
+      });
+    }
+
+    if (!['increase', 'decrease'].includes(type)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid quantity update type',
+      });
+    }
+
     let cart = await Cart.findOne({ userId });
     if (!cart)
       return res.status(400).json({
@@ -121,14 +135,26 @@ export const updateQuantity = async (req, res) => {
         success: false,
         message: 'Items not found',
       });
-    if (type === 'increase') item.quantity += 1;
-    if (type === 'decrease' && item.quantity > 1) item.quantity -= 1;
+    if (type === 'increase') {
+      item.quantity += 1;
+    }
+
+    if (type === 'decrease') {
+      if (item.quantity > 1) {
+        item.quantity -= 1;
+      } else {
+        cart.items = cart.items.filter(
+          (item) => item.productId.toString() !== productId,
+        );
+      }
+    }
+
     cart.totalPrice = cart.items.reduce(
       (acc, item) => acc + item.price * item.quantity,
       0,
     );
     await cart.save();
-    cart = await cart.populate('items.productId');
+    cart = await Cart.findById(cart._id).populate('items.productId');
     res.status(200).json({ success: true, cart });
   } catch (error) {
     return res.status(500).json({
@@ -141,6 +167,14 @@ export const removeFromCart = async (req, res) => {
   try {
     const userId = req.id;
     const {productId} = req.body;
+
+    if (!productId || !mongoose.isValidObjectId(productId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid product ID',
+      });
+    }
+
     let cart = await Cart.findOne({userId});
     if(!cart) return res.status(400).json({
       success: false,
@@ -148,10 +182,9 @@ export const removeFromCart = async (req, res) => {
     });
     cart.items = cart.items.filter(item => item.productId.toString() !== productId);
     cart.totalPrice = cart.items.reduce((acc, item)=> acc+item.price*item.quantity, 0)
-    
-    cart = await cart.populate('items.productId')
-
     await cart.save();
+    cart = await Cart.findById(cart._id).populate('items.productId');
+
     res.status(200).json({
         success:true,
         cart

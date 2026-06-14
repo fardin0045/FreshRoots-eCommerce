@@ -22,7 +22,7 @@ export const Cart = ({ product }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const API = `${API_URL}api/carts`;
+  const API = `${API_URL}/api/carts`;
   const accessToken = localStorage.getItem('accessToken');
 
   const loadCart = async () => {
