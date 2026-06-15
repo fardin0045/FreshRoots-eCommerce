@@ -244,6 +244,9 @@ FreshRoots is fully responsive and optimized for:
 
 <img width="1896" height="958" alt="image" src="https://github.com/user-attachments/assets/810874a4-a555-41ae-ba4a-149fb354a0b3" />
 
+<img width="1912" height="873" alt="image" src="https://github.com/user-attachments/assets/a8ae4367-0088-4ec9-814c-226ad01b6f3c" />
+
+<img width="1918" height="957" alt="image" src="https://github.com/user-attachments/assets/7dffc0e3-1367-48c1-985f-416dfb4ab2f7" />
 
 ---
 
