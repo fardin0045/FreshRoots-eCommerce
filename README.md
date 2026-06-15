@@ -92,7 +92,7 @@ FreshRoots
 ### Clone Repository
 
 ```bash
-git clone https://github.com/your-username/freshroots.git
+git clone [https://github.com/your-username/freshroots.git](https://github.com/fardin0045/FreshRoots-eCommerce.git)
 cd freshroots
 ```
 
