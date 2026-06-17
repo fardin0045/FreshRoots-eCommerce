@@ -537,9 +537,7 @@ const Login = () => {
               <p className="mt-1.5 text-sm text-gray-500">
                 Sign in to your account to continue
               </p>
-              <span  className="mt-1.5 text-sm text-gray-500 underline" >There is some problem with gmail verification so-</span>
-              <p className="mt-1.5 text-sm text-gray-500" >Use these credentials for login </p>
-              <div className="mt-1.5 text-sm text-gray-500" ><span>Email: guest@gmail.com</span> & <span>Pass: guest0045</span></div>
+             
               
             </div>
 
